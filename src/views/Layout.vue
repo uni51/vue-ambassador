@@ -3,7 +3,7 @@
     <Nav/>
 
     <main>
-      
+
       <Header/>
 
       <div class="album py-5 bg-light">
@@ -34,9 +34,20 @@
 <script>
 import Nav from "../components/Nav";
 import Header from "../components/Header";
+import { onMounted } from 'vue';
+import axios from "axios";
+import {useStore} from "vuex";
 
 export default {
   name: "Layout",
   components: {Header, Nav},
+  setup() {
+    const store = useStore();
+    onMounted(async () => {
+      const {data} = await axios.get('user');
+
+      await store.dispatch('setUser', data);
+    })
+  }
 }
 </script>
