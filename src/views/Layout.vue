@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <Nav/>
 
     <main>
@@ -28,7 +28,7 @@
         </div>
       </div>
     </main>
-  </v-app>  
+  </div>  
 </template>
 
 <script>
@@ -36,18 +36,24 @@ import Nav from "../components/Nav";
 import Header from "../components/Header";
 import { onMounted } from 'vue';
 import axios from "axios";
-import {useStore} from "vuex";
+import {User} from "@/models/user";
 
 export default {
   name: "Layout",
   components: {Header, Nav},
-  setup() {
-    const store = useStore();
-    onMounted(async () => {
+  data(){
+    return {
+      user: new User()
+    }
+  },
+  async mounted() {
+    try {
       const {data} = await axios.get('user');
 
-      await store.dispatch('setUser', data);
-    })
+      await this.$store.dispatch('setUser', data)
+    } catch (e) {
+      await this.$router.push('/login');
+    }
   }
 }
 </script>
