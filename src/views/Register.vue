@@ -26,7 +26,7 @@
       <div class="form-floating">
         <input v-model="password_confirm" type="password" class="form-control" placeholder="Password Confirm">
         <label>Password Confirm</label>
-      </div>      
+      </div>
 
       <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
     </form>

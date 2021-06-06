@@ -1,5 +1,5 @@
 import {Commit, createStore} from 'vuex'
-import { User } from '@/models/user'
+import {User} from '@/models/user'
 
 export default createStore({
   state: {
