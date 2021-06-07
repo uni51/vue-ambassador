@@ -10,6 +10,7 @@
       </ul>
 
       <div class="col-md-3 text-end" v-if="user">
+        <router-link to="/rankings" class="btn me-2">Rankings</router-link>
         <router-link to="/stats" class="btn me-2">Stats</router-link>
         <a href="#" class="btn btn-outline-primary me-2" @click="logout">Logout</a>
         <router-link to="/profile" class="btn btn-primary">{{ user.first_name }} {{ user.last_name }}</router-link>
