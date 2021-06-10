@@ -1,5 +1,5 @@
 <template>
-  <Products :products="products" :filters="filters" @self-filters="load"/>
+  <Products :products="products" :filters="filters" @set-filters="load"/>
 </template>
 
 <script lang="ts">

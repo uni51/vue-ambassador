@@ -25,11 +25,11 @@ import {SetupContext} from 'vue';
 export default {
   name: "Products",
   props: ['products', 'filters'],
-  emits: ['self-filters'],
+  emits: ['set-filters'],
   setup(props: any, context: SetupContext) {
 
     const search = (s: string) => {
-      context.emit('self-filters', {
+      context.emit('set-filters', {
         s
       });
     }

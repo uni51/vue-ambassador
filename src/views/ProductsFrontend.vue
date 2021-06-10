@@ -1,5 +1,5 @@
 <template>
-  <Products :products="products" :filters="filters" @self-filters="load($event)"/>
+  <Products :products="filteredProducts" :filters="filters" @set-filters="filtersChanged"/>
 </template>
 
 <script lang="ts">
@@ -13,20 +13,32 @@ export default {
   name: "ProductsFrontend",
   components: {Products},
   setup() {
-    const products = ref<Product[]>([]);
+    const allProducts = ref<Product[]>([]);
+    const filteredProducts = ref<Product[]>([]);
     const filters = reactive({
       s: ''
     });
 
-    onMounted( async () => {
-      const {data} = await axios.get('products/frontend');
+    onMounted(async () => {
+      const { data } = await axios.get('products/frontend');
 
-      products.value = data;
+      allProducts.value = data;
+      filteredProducts.value = data;
     });
 
+    const filtersChanged = (f: Filter) => {
+      filters.s = f.s;
+
+      let products = allProducts.value.filter(p => p.title.toLowerCase().indexOf(filters.s.toLowerCase()) >= 0 || 
+          p.description.toLowerCase().indexOf(filters.s.toLowerCase()) >= 0);
+          
+      filteredProducts.value = products;
+    }
+
     return {
-      products,
-      filters
+      filteredProducts,
+      filters,
+      filtersChanged
     }
   }
 }
