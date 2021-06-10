@@ -9,20 +9,20 @@ import {Product} from "@/models/product";
 import axios from "axios";
 
 export default {
-  name: "ProductsFrontend",
+  name: "ProductsBackend",
   components: {Products},
   setup() {
     const products = ref<Product[]>([]);
 
     onMounted( async () => {
-      const {data} = await axios.get('products/frontend');
+      const {data} = await axios.get('products/backend');
 
-      products.value = data;
+      products.value = data.data;
     });
 
     return {
       products  
     }
-  }
+  }  
 }
 </script>
