@@ -1,4 +1,8 @@
 <template>
+  <div class="col-md-12 mb-4 input-group">
+    <input class="form-control" placeholder="Search" @keyup="search($event.target.value)"/>
+  </div>  
+
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     <div class="col" v-for="product in products" :key="product.id">
       <div class="card shadow-sm">
@@ -15,9 +19,24 @@
   </div>  
 </template>
 
-<script>
+<script lang="ts">
+import {SetupContext} from 'vue';
+
 export default {
   name: "Products",
-  props: ['products']
+  props: ['products', 'filters'],
+  emits: ['self-filters'],
+  setup(props: any, context: SetupContext) {
+
+    const search = (s: string) => {
+      context.emit('self-filters', {
+        s
+      });
+    }
+
+    return {
+      search
+    }
+  }
 }
 </script>
