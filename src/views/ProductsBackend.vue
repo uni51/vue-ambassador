@@ -1,5 +1,5 @@
 <template>
-  <Products :products="products" :filters="filters" @set-filters="load"/>
+  <Products :products="products" :filters="filters" @set-filters="load" :lastPage="lastPage"/>
 </template>
 
 <script lang="ts">
@@ -19,6 +19,7 @@ export default {
       sort: '',
       page: 1
     });
+     const lastPage = ref(0);
 
     const load = async (f: Filter) => {
       filters.s = f.s;
@@ -42,6 +43,7 @@ export default {
       const {data} = await axios.get(`products/backend?${arr.join('&')}`);
 
       products.value = filters.page === 1 ? data.data : [...products.value, ...data.data];
+      lastPage.value = data.meta.last_page;
     };
 
     onMounted(() => load(filters));
@@ -49,6 +51,7 @@ export default {
     return {
       products,
       filters,
+      lastPage,
       load
     }
   }  
