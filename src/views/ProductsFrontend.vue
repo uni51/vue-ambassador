@@ -29,10 +29,23 @@ export default {
 
     const filtersChanged = (f: Filter) => {
       filters.s = f.s;
+      filters.sort = f.sort;
 
       let products = allProducts.value.filter(p => p.title.toLowerCase().indexOf(filters.s.toLowerCase()) >= 0 || 
           p.description.toLowerCase().indexOf(filters.s.toLowerCase()) >= 0);
+
+      if (filters.sort === 'asc' || filters.sort === 'desc') {
+        products.sort((a, b) => {
+          const diff = a.price - b.price;
+
+          if(diff === 0) return 0;
           
+          const sign = Math.abs(diff) / diff;
+
+          return filters.sort === 'asc' ? sign : -sign;
+        })
+      }
+
       filteredProducts.value = products;
     }
 
