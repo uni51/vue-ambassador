@@ -16,12 +16,15 @@ export default {
     const products = ref<Product[]>([]);
     const filters = reactive<Filter>({
       s: '',
-      sort: ''
+      sort: '',
+      page: 1
     });
 
     const load = async (f: Filter) => {
       filters.s = f.s;
       filters.sort = f.sort;
+      filters.page = f.page;
+
       const arr = [];
 
       if (filters.s) {
@@ -32,9 +35,13 @@ export default {
         arr.push(`sort=${filters.sort}`);
       }
 
+      if(filters.page) {
+        arr.push(`page=${filters.page}`);
+      }      
+
       const {data} = await axios.get(`products/backend?${arr.join('&')}`);
 
-      products.value = data.data;
+      products.value = filters.page === 1 ? data.data : [...products.value, ...data.data];
     };
 
     onMounted(() => load(filters));

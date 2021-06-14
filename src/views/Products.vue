@@ -22,7 +22,11 @@
         </div>
       </div>
     </div>
-  </div>  
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <button class="btn btn-primary" @click="loadMore">Load More</button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,20 +41,30 @@ export default {
     const search = (s: string) => {
       context.emit('set-filters', {
         ...props.filters,
-        s
+        s,
+        page: 1
       });
     }
 
     const sort = (sort: string) => {
       context.emit('set-filters', {
         ...props.filters,
-        sort
+        sort,
+        page: 1
+      });
+    }
+
+    const loadMore = () => {
+      context.emit('set-filters', {
+        ...props.filters,
+        page: props.filters.page + 1
       });
     }
  
     return {
       search,
-      sort
+      sort,
+      loadMore
     }
   }
 }
