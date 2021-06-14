@@ -15,8 +15,9 @@ export default {
   setup() {
     const allProducts = ref<Product[]>([]);
     const filteredProducts = ref<Product[]>([]);
-    const filters = reactive({
-      s: ''
+    const filters = reactive<Filter>({
+      s: '',
+      sort: ''
     });
 
     onMounted(async () => {

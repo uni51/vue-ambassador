@@ -14,16 +14,22 @@ export default {
   components: {Products},
   setup() {
     const products = ref<Product[]>([]);
-    const filters = reactive({
-      s: ''
+    const filters = reactive<Filter>({
+      s: '',
+      sort: ''
     });
 
     const load = async (f: Filter) => {
       filters.s = f.s;
+      filters.sort = f.sort;
       const arr = [];
 
       if (filters.s) {
         arr.push(`s=${filters.s}`);
+      }
+
+      if(filters.sort) {
+        arr.push(`sort=${filters.sort}`);
       }
 
       const {data} = await axios.get(`products/backend?${arr.join('&')}`);
