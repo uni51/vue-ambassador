@@ -1,6 +1,21 @@
 <template>
+  <div class="col-md-12 mb-4" v-if="link">
+    <div class="alert alert-info" role="alert">
+      {{ link }}
+    </div>
+  </div>
+
+  <div class="col-md-12 mb-4" v-if="error">
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+  </div>
+
   <div class="col-md-12 mb-4 input-group">
     <input class="form-control" placeholder="Search" @keyup="search($event.target.value)"/>
+    <div class="input-group-append" v-if="selected.length > 0">
+      <button class="btn btn-info" @click="generate">Generate Link</button>
+    </div>
     <div class="input-group-append">
       <select class="form-select" @change="sort($event.target.value)">
         <option>Select</option>
@@ -31,6 +46,7 @@
 
 <script lang="ts">
 import {ref, SetupContext} from 'vue';
+import axios from "axios";
 
 export default {
   name: "Products",
@@ -38,6 +54,8 @@ export default {
   emits: ['set-filters'],
   setup(props: any, context: SetupContext) {
     const selected = ref<number[]>([]);
+    const link = ref('');
+    const error = ref('');
 
     const search = (s: string) => {
       context.emit('set-filters', {
@@ -70,13 +88,33 @@ export default {
       
       selected.value = [...selected.value, id];
     }
+
+    const generate = async () => {
+      try {
+        const {data} = await axios.post('links', {
+          products: selected.value
+        });
+
+        link.value = `Link generated: ${process.env.VUE_APP_CHECKOUT_URL}/${data.code}`;
+      } catch (e) {
+        error.value = 'You should be logged in to generate a link!';
+      } finally {
+        setTimeout(() => {
+          link.value = '';
+          error.value = '';
+        }, 5000);
+      }
+    }
  
     return {
       selected,
+      link,
+      error,
       search,
       sort,
       loadMore,
-      select
+      select,
+      generate
     }
   }
 }
